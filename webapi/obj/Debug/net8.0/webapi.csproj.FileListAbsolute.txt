@@ -1,0 +1,9 @@
+/Users/jesseingles/Dev/Kimbito/webapi/obj/Debug/net8.0/webapi.csproj.AssemblyReference.cache
+/Users/jesseingles/Dev/Kimbito/webapi/obj/Debug/net8.0/rpswa.dswa.cache.json
+/Users/jesseingles/Dev/Kimbito/webapi/obj/Debug/net8.0/webapi.GeneratedMSBuildEditorConfig.editorconfig
+/Users/jesseingles/Dev/Kimbito/webapi/obj/Debug/net8.0/webapi.AssemblyInfoInputs.cache
+/Users/jesseingles/Dev/Kimbito/webapi/obj/Debug/net8.0/webapi.AssemblyInfo.cs
+/Users/jesseingles/Dev/Kimbito/webapi/obj/Debug/net8.0/webapi.csproj.CoreCompileInputs.cache
+/Users/jesseingles/Dev/Kimbito/webapi/obj/Debug/net8.0/webapi.MvcApplicationPartsAssemblyInfo.cs
+/Users/jesseingles/Dev/Kimbito/webapi/obj/Debug/net8.0/webapi.MvcApplicationPartsAssemblyInfo.cache
+/Users/jesseingles/Dev/Kimbito/webapi/obj/Debug/net8.0/webapi.sourcelink.json
