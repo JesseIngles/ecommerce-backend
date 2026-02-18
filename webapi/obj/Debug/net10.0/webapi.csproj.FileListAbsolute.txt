@@ -179,3 +179,11 @@
 /Users/jesseingles/Dev/Kimbito/webapi/obj/Debug/net10.0/ref/webapi.dll
 /Users/jesseingles/Dev/Kimbito/webapi/bin/Debug/net10.0/Npgsql.dll
 /Users/jesseingles/Dev/Kimbito/webapi/bin/Debug/net10.0/Npgsql.EntityFrameworkCore.PostgreSQL.dll
+/Users/jesseingles/Dev/Kimbito/webapi/bin/Debug/net10.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
+/Users/jesseingles/Dev/Kimbito/webapi/bin/Debug/net10.0/Microsoft.IdentityModel.Abstractions.dll
+/Users/jesseingles/Dev/Kimbito/webapi/bin/Debug/net10.0/Microsoft.IdentityModel.JsonWebTokens.dll
+/Users/jesseingles/Dev/Kimbito/webapi/bin/Debug/net10.0/Microsoft.IdentityModel.Logging.dll
+/Users/jesseingles/Dev/Kimbito/webapi/bin/Debug/net10.0/Microsoft.IdentityModel.Protocols.dll
+/Users/jesseingles/Dev/Kimbito/webapi/bin/Debug/net10.0/Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+/Users/jesseingles/Dev/Kimbito/webapi/bin/Debug/net10.0/Microsoft.IdentityModel.Tokens.dll
+/Users/jesseingles/Dev/Kimbito/webapi/bin/Debug/net10.0/System.IdentityModel.Tokens.Jwt.dll
