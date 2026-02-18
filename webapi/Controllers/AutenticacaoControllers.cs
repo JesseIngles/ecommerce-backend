@@ -33,9 +33,10 @@ public class AutenticacaoController : Controller
     }
 
     [HttpPost("Login")]
-    public async Task<IActionResult> Login([FromBody] string usernameOrEmail = "user@example.com", string passWord = "")
+    public async Task<IActionResult> Login([FromBody] LoginDto dto)
     {
-        var result = await _autenticacaoService.Login(usernameOrEmail, passWord);
+        if (dto == null) return BadRequest();
+        var result = await _autenticacaoService.Login(dto.UsernameOrEmail, dto.Password);
         return StatusCode(result.StatusCode, result);
     }
 

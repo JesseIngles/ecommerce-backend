@@ -13,15 +13,20 @@ namespace Kimbito.Infra.Repositories;
 public class AutenticacaoRepository : IAutenticacao
 {
     private readonly KimbitoDbContext _db;
-    public AutenticacaoRepository(KimbitoDbContext dbContext)
+    private readonly IConfiguration _config;
+
+    public AutenticacaoRepository(KimbitoDbContext dbContext, IConfiguration config)
     {
         _db = dbContext;
+        _config = config;
     }
 
     public async Task<Utilizador?> CadastrarUtilizador(Utilizador utilizador)
     {
-        if(utilizador == null)
+        if (utilizador == null)
             return null;
+        if (utilizador.Id == default)
+            utilizador.Id = Guid.NewGuid();
 
         _db.Utilizadores.Add(utilizador);
 
@@ -31,28 +36,29 @@ public class AutenticacaoRepository : IAutenticacao
     }
     private string generateUtilizadorToken(Utilizador utilizador)
     {
-        string utilizadorToken = string.Empty;
-        string _jwtSecret = "your_jwt_secret_here";
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSecret));
+        var jwtSecret = _config["Jwt:Secret"] ?? "your_jwt_secret_here_min_32_chars_long_for_HS256";
+        var issuer = _config["Jwt:Issuer"] ?? "KimbitoEcommerce";
+        var audience = _config["Jwt:Audience"] ?? "KimbitoEcommerce";
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var claims = new List<Claim>
         {
             new Claim("Id", utilizador.Id.ToString()),
-            new Claim("Email", utilizador.Email), 
+            new Claim("Email", utilizador.Email),
             new Claim("nome", utilizador.NomeUsuario),
+            new Claim(System.Security.Claims.ClaimTypes.Role, utilizador.Nivel.ToString()),
         };
 
         var token = new JwtSecurityToken(
-            issuer: "Ecommerce",
-            audience: "Ecommerce",
+            issuer: issuer,
+            audience: audience,
             claims: claims,
-            expires: DateTime.Now.AddMonths(1),
+            expires: DateTime.UtcNow.AddMonths(1),
             signingCredentials: creds
         );
 
-        utilizadorToken = new JwtSecurityTokenHandler().WriteToken(token);
-
+        var utilizadorToken = new JwtSecurityTokenHandler().WriteToken(token);
         return utilizadorToken;
     }
 
@@ -67,7 +73,7 @@ public class AutenticacaoRepository : IAutenticacao
 
         bool gerarToken = (utilizador != null && BCryptNet.BCryptHelper.CheckPassword(passWord, utilizador.Senha));
 
-        if(!gerarToken)
+        if (!gerarToken || utilizador == null)
             return null;
 
         return generateUtilizadorToken(utilizador);

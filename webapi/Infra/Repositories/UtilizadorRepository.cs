@@ -22,7 +22,10 @@ public class UtilizadorRepository : IUtilizador
 
         utilizadorExistente.NomeUsuario = utilizador.NomeUsuario;
         utilizadorExistente.Email = utilizador.Email;
-        
+        utilizadorExistente.Avatar = utilizador.Avatar;
+        utilizadorExistente.Nivel = utilizador.Nivel;
+        utilizadorExistente.DataAtualizacao = DateTime.UtcNow;
+
         _db.Utilizadores.Update(utilizadorExistente);
         await _db.SaveChangesAsync();
 

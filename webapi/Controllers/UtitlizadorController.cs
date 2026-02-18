@@ -3,54 +3,45 @@ using Kimbito.Services;
 using Kimbito.Services.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging.EventLog;
 
 namespace Kimbito.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-
-public class UtilizadorController : Controller
+[Authorize]
+public class UtilizadorController : ControllerBase
 {
-    private ILogger<UtilizadorController> _logger;
-    private UtilizadorService _utilizadorService;
-    public UtilizadorController(ILogger<UtilizadorController> logger, UtilizadorService utilizadorService)
+    private readonly UtilizadorService _utilizadorService;
+
+    public UtilizadorController(UtilizadorService utilizadorService)
     {
-        _logger = logger;
         _utilizadorService = utilizadorService;
     }
 
-    [Authorize]
+    private Guid? UtilizadorId => Guid.TryParse(User.FindFirstValue("Id"), out var id) ? id : null;
+
     [HttpPatch]
-    public async Task<IActionResult> Atualizar([FromForm] UtilizadorDto utilizador, [FromQuery] int utilizadorId)
+    public async Task<IActionResult> Atualizar([FromBody] UtilizadorDto dto)
     {
-        
-        return Ok();
-    }
-
-    [Authorize]
-    [HttpGet("{id:Guid}")]
-    public async Task<IActionResult> ObterPorId([FromQuery] Guid? Id)
-    {
-        Guid? userId = Guid.Parse(User.FindFirstValue("Id")!);
-        if(userId is null && Id is null)
-            return BadRequest();
-        else 
-            userId = Id;
-
-        var result = await _utilizadorService.ObterUtilizador(userId);
-
+        if (UtilizadorId == null) return Unauthorized();
+        var result = await _utilizadorService.AtualizarUtilizador(UtilizadorId.Value, dto);
         return StatusCode(result.StatusCode, result);
     }
 
+    [HttpGet("{id:guid}")]
+    public async Task<IActionResult> ObterPorId(Guid id)
+    {
+        if (UtilizadorId == null) return Unauthorized();
+        var result = await _utilizadorService.ObterUtilizador(id);
+        return StatusCode(result.StatusCode, result);
+    }
 
-   
-
-
-
-
-
-     
-    
+    [HttpGet("me")]
+    public async Task<IActionResult> ObterMeuPerfil()
+    {
+        if (UtilizadorId == null) return Unauthorized();
+        var result = await _utilizadorService.ObterUtilizador(UtilizadorId);
+        return StatusCode(result.StatusCode, result);
+    }
 }
 

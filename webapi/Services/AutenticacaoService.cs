@@ -1,4 +1,5 @@
 using Kimbito.Domain.Entities;
+using Kimbito.Domain.Enums;
 using Kimbito.Domain.Interfaces;
 using Kimbito.Services.Dtos;
 using Kimbito.Shared;
@@ -17,8 +18,14 @@ public class AutenticacaoService
 
     public async Task<ApiResponse<Utilizador>> CadastrarUtilizador(CriarUtilizadorDto utilizador)
     {
-        var novoUtilizador = new Utilizador(utilizador.Nome, utilizador.Email, BCryptNet.BCryptHelper.HashPassword(utilizador.Senha, BCryptNet.BCryptHelper.GenerateSalt()));
+        var nivel = utilizador.Nivel ?? NivelUtilizador.Cliente;
+        var novoUtilizador = new Utilizador(
+            utilizador.Nome,
+            utilizador.Email,
+            BCryptNet.BCryptHelper.HashPassword(utilizador.Senha, BCryptNet.BCryptHelper.GenerateSalt()),
+            nivel);
 
+        if (utilizador.Avatar != null) novoUtilizador.Avatar = utilizador.Avatar;
         var result = await _autenticacaoRepository.CadastrarUtilizador(novoUtilizador);
 
         if(result == null)
