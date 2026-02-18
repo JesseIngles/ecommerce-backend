@@ -32,14 +32,14 @@ public class AutenticacaoController : Controller
         return Ok();
     }
 
-    [HttpGet("Login")]
+    [HttpPost("Login")]
     public async Task<IActionResult> Login([FromBody] string usernameOrEmail = "user@example.com", string passWord = "")
     {
         var result = await _autenticacaoService.Login(usernameOrEmail, passWord);
         return StatusCode(result.StatusCode, result);
     }
 
-    [HttpGet("Google/Login")]
+    [HttpPost("Google/Login")]
     public async Task<IActionResult> GoogleLogin([FromBody] string googleToken)
     {
         return Ok();

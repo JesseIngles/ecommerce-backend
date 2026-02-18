@@ -179,6 +179,3 @@
 /Users/jesseingles/Dev/Kimbito/webapi/obj/Debug/net10.0/ref/webapi.dll
 /Users/jesseingles/Dev/Kimbito/webapi/bin/Debug/net10.0/Npgsql.dll
 /Users/jesseingles/Dev/Kimbito/webapi/bin/Debug/net10.0/Npgsql.EntityFrameworkCore.PostgreSQL.dll
-/Users/jesseingles/Dev/Kimbito/webapi/bin/Debug/net10.0/Swashbuckle.AspNetCore.Swagger.dll
-/Users/jesseingles/Dev/Kimbito/webapi/bin/Debug/net10.0/Swashbuckle.AspNetCore.SwaggerGen.dll
-/Users/jesseingles/Dev/Kimbito/webapi/bin/Debug/net10.0/Swashbuckle.AspNetCore.SwaggerUI.dll

@@ -11,7 +11,5 @@ public class KimbitoDbContext : DbContext
     }
     public DbSet<Utilizador> Utilizadores { get; set; }
 
-    
-
 
 }
