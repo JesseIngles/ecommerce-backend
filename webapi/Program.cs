@@ -5,6 +5,7 @@ using Kimbito.Infra.Repositories;
 using Kimbito.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
@@ -45,6 +46,30 @@ var jwtAudience = builder.Configuration["Jwt:Audience"];
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
+        options.Events = new JwtBearerEvents
+        {
+
+            OnAuthenticationFailed = ctx =>
+            {
+                Console.WriteLine("Falha JWT: " + ctx.Exception.Message);
+                return Task.CompletedTask;
+            },
+            OnMessageReceived = context =>
+            {
+                var token = context.Request.Headers["Authorization"].FirstOrDefault();
+                if (!string.IsNullOrEmpty(token) && token.StartsWith("Bearer "))
+                {
+                    context.Token = token.Substring("Bearer ".Length).Trim();
+                }
+                else
+                {
+                    context.Token = token;
+                }
+
+                Console.WriteLine("Token limpo para validação: " + context.Token);
+                return Task.CompletedTask;
+            }
+        };
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
@@ -57,6 +82,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret))
         };
     });
+IdentityModelEventSource.ShowPII = true;
 
 builder.Services.AddAuthorization();
 

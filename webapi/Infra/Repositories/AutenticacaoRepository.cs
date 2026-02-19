@@ -36,7 +36,7 @@ public class AutenticacaoRepository : IAutenticacao
     }
     private string generateUtilizadorToken(Utilizador utilizador)
     {
-        var jwtSecret = _config["Jwt:Secret"] ?? "your_jwt_secret_here_min_32_chars_long_for_HS256";
+        var jwtSecret = _config["Jwt:Secret"] ?? "uH3q7W!9fP$k8VzR2mB@xE4sT#yL1QwD";
         var issuer = _config["Jwt:Issuer"] ?? "KimbitoEcommerce";
         var audience = _config["Jwt:Audience"] ?? "KimbitoEcommerce";
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret));
@@ -46,7 +46,6 @@ public class AutenticacaoRepository : IAutenticacao
         {
             new Claim("Id", utilizador.Id.ToString()),
             new Claim("Email", utilizador.Email),
-            new Claim("nome", utilizador.NomeUsuario),
             new Claim(System.Security.Claims.ClaimTypes.Role, utilizador.Nivel.ToString()),
         };
 
