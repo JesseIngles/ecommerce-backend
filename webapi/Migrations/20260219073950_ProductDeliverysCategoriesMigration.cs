@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -6,26 +6,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace webapi.Migrations
 {
     /// <inheritdoc />
-    public partial class AddEcommerceAndNivel : Migration
+    public partial class ProductDeliverysCategoriesMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<int>(
-                name: "Nivel",
-                table: "Utilizadores",
-                type: "integer",
-                nullable: false,
-                defaultValue: 0);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DataExclusao",
-                table: "Utilizadores",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
             migrationBuilder.CreateTable(
                 name: "Categorias",
                 columns: table => new
@@ -39,7 +24,10 @@ namespace webapi.Migrations
                     DataCriacao = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     DataAtualizacao = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
-                constraints: table => table.PrimaryKey("PK_Categorias", x => x.Id));
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categorias", x => x.Id);
+                });
 
             migrationBuilder.CreateTable(
                 name: "FormasPagamento",
@@ -54,7 +42,57 @@ namespace webapi.Migrations
                     Ordem = table.Column<int>(type: "integer", nullable: false),
                     DataCriacao = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
-                constraints: table => table.PrimaryKey("PK_FormasPagamento", x => x.Id));
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FormasPagamento", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Utilizadores",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Avatar = table.Column<string>(type: "text", nullable: true),
+                    NomeUsuario = table.Column<string>(type: "text", nullable: false),
+                    Email = table.Column<string>(type: "text", nullable: false),
+                    Senha = table.Column<string>(type: "text", nullable: false),
+                    GoogleId = table.Column<string>(type: "text", nullable: true),
+                    Nivel = table.Column<int>(type: "integer", nullable: false),
+                    DataRegistro = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    DataAtualizacao = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    DataExclusao = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Utilizadores", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Produtos",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    CategoriaId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Nome = table.Column<string>(type: "text", nullable: false),
+                    Slug = table.Column<string>(type: "text", nullable: false),
+                    Descricao = table.Column<string>(type: "text", nullable: true),
+                    Preco = table.Column<decimal>(type: "numeric", nullable: false),
+                    Stock = table.Column<int>(type: "integer", nullable: false),
+                    ImagemUrl = table.Column<string>(type: "text", nullable: true),
+                    Activo = table.Column<bool>(type: "boolean", nullable: false),
+                    DataCriacao = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    DataAtualizacao = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Produtos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Produtos_Categorias_CategoriaId",
+                        column: x => x.CategoriaId,
+                        principalTable: "Categorias",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
 
             migrationBuilder.CreateTable(
                 name: "Moradas",
@@ -84,33 +122,6 @@ namespace webapi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Produtos",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    CategoriaId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Nome = table.Column<string>(type: "text", nullable: false),
-                    Slug = table.Column<string>(type: "text", nullable: false),
-                    Descricao = table.Column<string>(type: "text", nullable: true),
-                    Preco = table.Column<decimal>(type: "numeric", nullable: false),
-                    Stock = table.Column<int>(type: "integer", nullable: false),
-                    ImagemUrl = table.Column<string>(type: "text", nullable: true),
-                    Activo = table.Column<bool>(type: "boolean", nullable: false),
-                    DataCriacao = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    DataAtualizacao = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Produtos", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Produtos_Categorias_CategoriaId",
-                        column: x => x.CategoriaId,
-                        principalTable: "Categorias",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Encomendas",
                 columns: table => new
                 {
@@ -131,14 +142,13 @@ namespace webapi.Migrations
                         name: "FK_Encomendas_FormasPagamento_FormaPagamentoId",
                         column: x => x.FormaPagamentoId,
                         principalTable: "FormasPagamento",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Encomendas_Moradas_MoradaId",
                         column: x => x.MoradaId,
                         principalTable: "Moradas",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Encomendas_Utilizadores_UtilizadorId",
                         column: x => x.UtilizadorId,
@@ -172,7 +182,7 @@ namespace webapi.Migrations
                         column: x => x.ProdutoId,
                         principalTable: "Produtos",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -214,23 +224,26 @@ namespace webapi.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(name: "EncomendaItens");
-            migrationBuilder.DropTable(name: "Encomendas");
-            migrationBuilder.DropTable(name: "Produtos");
-            migrationBuilder.DropTable(name: "Moradas");
-            migrationBuilder.DropTable(name: "FormasPagamento");
-            migrationBuilder.DropTable(name: "Categorias");
+            migrationBuilder.DropTable(
+                name: "EncomendaItens");
 
-            migrationBuilder.DropColumn(name: "Nivel", table: "Utilizadores");
+            migrationBuilder.DropTable(
+                name: "Encomendas");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DataExclusao",
-                table: "Utilizadores",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
+            migrationBuilder.DropTable(
+                name: "Produtos");
+
+            migrationBuilder.DropTable(
+                name: "FormasPagamento");
+
+            migrationBuilder.DropTable(
+                name: "Moradas");
+
+            migrationBuilder.DropTable(
+                name: "Categorias");
+
+            migrationBuilder.DropTable(
+                name: "Utilizadores");
         }
     }
 }
